@@ -1,5 +1,5 @@
 {
-    "sample": [
+    "suduko_solver": [
         "Can you help me solve this Sudoku puzzle?",
         "I'm stuck on this Sudoku board. Can you assist me?",
         "Is it possible for you to solve this Sudoku puzzle?",
