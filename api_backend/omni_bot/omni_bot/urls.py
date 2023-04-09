@@ -16,9 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 from django.urls import path
-from model_switcher.views import ModelSwitcherView
+from model_switcher.views import ModelSwitcherView, ModelSwitcherTestView
 
 urlpatterns = [
     re_path(r'^admin/', admin.site.urls),
     re_path('^model_switcher/$', ModelSwitcherView.as_view(), name="model_switcher"),
+    re_path('^model_switcher_test/$', ModelSwitcherTestView.as_view(), name="model_switcher_test"),
 ]

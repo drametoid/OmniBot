@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 import json
 import os
+from model_switcher.utils import preprocess_prompt, get_prompt_category
 from dotenv import load_dotenv
 
 ## Loading Env Variables
@@ -22,10 +23,7 @@ class ModelSwitcherView(APIView):
         medium_link = request.GET.get('medium_link', '')
         if not prompt:
             return Response(data={"message": "Prompt is a required field"}, status=status.HTTP_400_BAD_REQUEST)
-        # i=0
-        # for line in data["sample"][::-1]:
-        #     print(i)
-        #     i+=1
+
         user_prompt = f'''
             Please categorize the following prompt into one of these four categories (Sudoku Puzzle, Object Detection, Blog Scraping, Normal Conversation), based on the task they are performing. If the prompt is asking for summarizing of medium blog, then it is likely blog scraping. Please assign one of the mentioned category to the prompt:
 
@@ -60,3 +58,13 @@ class ModelSwitcherView(APIView):
             print(f"Prompt {user_prompt} -> res {text}")
             res.append("Not Sure")
         return Response(data={"message": f"User is asking to use {text}"}, status=status.HTTP_200_OK)
+
+class ModelSwitcherTestView(APIView):
+
+    def get(self, request): 
+        prompt = request.GET.get('prompt', '')
+        print(prompt)
+        processed_prompt = preprocess_prompt(prompt)
+        category = get_prompt_category(processed_prompt)
+        print(category)
+        return Response(data={"message": f"User is asking to use {category}"}, status=status.HTTP_200_OK)
