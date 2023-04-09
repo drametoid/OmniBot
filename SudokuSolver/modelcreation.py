@@ -45,7 +45,6 @@ def main(input_file, saved_model_path=None, get_test_accuracy=False):
         else:
             print('ERROR: Unable to load model or wrong path provided!')
             sys.exit(1)
-    
 
 if __name__ == '__main__':
     print(f'''Following input arguments need to be provided:\n
