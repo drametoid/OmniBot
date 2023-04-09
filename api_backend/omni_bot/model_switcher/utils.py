@@ -4,6 +4,8 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import string
 import pickle
+import spacy
+import sys, fitz
 from model_switcher.scraping_functions import display_summary
 
 def preprocess_prompt(prompt):
@@ -48,4 +50,15 @@ def summarize_article(article_link):
     return article_summary
 
 def get_resume_summarized(resume):
-    pass
+    nlp_model = spacy.load('/Users/raghukapur/private-projects/final_project_733/OmniBot/models/nlp_model')
+    print("----------------")
+    doc = fitz.open(resume)
+    print(doc)
+    text = ""
+    for page in doc:
+        text = text + str(page.getText())
+    tx = " ".join(text.split('\n'))
+
+    doc = nlp_model(tx)
+    for ent in doc.ents:
+        print(f'{ent.label_.upper():{30}}- {ent.text}')
