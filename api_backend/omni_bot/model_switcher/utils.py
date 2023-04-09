@@ -4,6 +4,7 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import string
 import pickle
+from model_switcher.scraping_functions import display_summary
 
 def preprocess_prompt(prompt):
     prompt = prompt.lower()
@@ -36,3 +37,15 @@ def get_prompt_category(prompt):
         model = pickle.load(f)
     predicted_category = model.predict([prompt])[0]
     return predicted_category
+
+def get_suduko_solver(suduko):
+    pass
+
+def summarize_article(article_link):
+    article_summary, length = display_summary(article_link)
+    print(article_summary)
+    print("//////////////")
+    return article_summary
+
+def get_resume_summarized(resume):
+    pass

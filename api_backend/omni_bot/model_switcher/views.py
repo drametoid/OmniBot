@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 import json
 import os
-from model_switcher.utils import preprocess_prompt, get_prompt_category
+from model_switcher.utils import preprocess_prompt, get_prompt_category, summarize_article, get_suduko_solver, get_resume_summarized
 from dotenv import load_dotenv
 
 ## Loading Env Variables
@@ -63,8 +63,19 @@ class ModelSwitcherTestView(APIView):
 
     def get(self, request): 
         prompt = request.GET.get('prompt', '')
+        if not prompt:
+            return Response(data={"message": "Prompt is a required field"}, status=status.HTTP_400_BAD_REQUEST)
         print(prompt)
         processed_prompt = preprocess_prompt(prompt)
         category = get_prompt_category(processed_prompt)
+        if category == "blog":
+            link = request.GET.get('medium_link', '')
+            if not link:
+                return Response(data={"message": "medium_link is a required field"}, status=status.HTTP_400_BAD_REQUEST)
+            summarized_article = summarize_article(link)
+            if not summarized_article:
+                return Response(data={"message": "Failed to get article summary, please try after some time"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            else:
+                return Response(data={"summary": summarized_article}, status=status.HTTP_200_OK)    
         print(category)
         return Response(data={"message": f"User is asking to use {category}"}, status=status.HTTP_200_OK)
