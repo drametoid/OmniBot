@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.IDFModel","timestamp":1680935072157,"sparkVersion":"3.3.2","uid":"IDF_f0a66cf7a136","paramMap":{"outputCol":"tf_idf_reviews","inputCol":"c_vectorized_review"},"defaultParamMap":{"outputCol":"IDF_f0a66cf7a136__output","minDocFreq":0}}
