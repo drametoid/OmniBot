@@ -16,11 +16,16 @@ class ModelSwitcherView(APIView):
 
     def get(self, request):
         res = []
+        # data = json.load(open('/Users/raghukapur/private-projects/OmniBot/api_backend/omni_bot/model_switcher/suduko_prompts.json'))
         openai.api_key = GPT_SECRET_KEY
         prompt = request.GET.get('prompt', '')
         medium_link = request.GET.get('medium_link', '')
         if not prompt:
             return Response(data={"message": "Prompt is a required field"}, status=status.HTTP_400_BAD_REQUEST)
+        # i=0
+        # for line in data["sample"][::-1]:
+        #     print(i)
+        #     i+=1
         user_prompt = f'''
             Please categorize the following prompt into one of these four categories (Sudoku Puzzle, Object Detection, Blog Scraping, Normal Conversation), based on the task they are performing. If the prompt is asking for summarizing of medium blog, then it is likely blog scraping. Please assign one of the mentioned category to the prompt:
 
@@ -54,4 +59,4 @@ class ModelSwitcherView(APIView):
         else:
             print(f"Prompt {user_prompt} -> res {text}")
             res.append("Not Sure")
-        return Response(data={"message": f"User Prompt is redirected towards the {text} model"}, status=status.HTTP_200_OK)
+        return Response(data={"message": f"User is asking to use {text}"}, status=status.HTTP_200_OK)
