@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './ChatApp.css';
 import userAvatar from './user-avatar.png';
 import botAvatar from './bot-avatar.jpeg';
@@ -10,94 +10,18 @@ const ChatApp = () => {
   const [newMessage, setNewMessage] = useState('');
   const [image, setImage] = useState(null);
   const [uploadedFileName, setUploadedFileName] = useState('');
-  const [prompt, setPrompt] = useState('');
-  const [link, setLink] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [userResponse, setuserResponse] = useState('prompt');
-  const [userInput, setUserInput] = useState('');
   const [category, setCategory] = useState('');
-  const [pdfBlob, setPdfBlob] = useState(null);
 
   const fakeMessages = [
     { id: 1, text: 'Hi there! What can I do for you', sender: 'bot', avatar: botAvatar },
-    // { id: 2, text: 'Hi there!', sender: 'bot', avatar: botAvatar },
-    // { id: 3, text: 'What can I do for you?', sender: 'bot', avatar: botAvatar },
-    // { id: 4, text: "Can you summarize this Medium blog for me?", sender: 'user', avatar: userAvatar },
-    // { id: 5, text: 'Sure, Please enter the URL for the blog.', sender: 'bot', avatar: botAvatar },
-    // { id: 6, text: "MEDIUM_LINK: https://medium.com/sfu-cspmp/the-artistic-potential-of-ai-understanding-dall-e-2-and-stable-diffusion-10a82e6965c0", sender: 'user', avatar: userAvatar },
-    // { id: 7, text: '<div class="title">The Artistic Potential of AI: Understanding DALL-E 2 and Stable Diffusion</div><div class="sub-title">Written by Machine Minds on Feb 11</div><div class="heading">An Overview</div><div>AI is transforming the digital world by allowing machines to act and think like humans. Generative AI takes this a step further, introducing the ability to craete visuals, texts, sounds or songs. Models such as DALL-E 2 and Stable Diffusion, developed by OpenAI and LMU Munich respectively, use transformer-based designs and extensive training data to generate images from verbal descriptions, pushing the boundaries of creativity. AI has something to offer for everyone, with endless possibilities in store.<div>  \n <div class="heading">The Technology Behind DALL-E 2 </div>', sender: 'bot', avatar: botAvatar },
   ];
   const [messages, setMessages] = useState(fakeMessages);
-  // This useEffect hook will simulate fetching messages from a backend.
-  // useEffect(() => {
-    
-  //   const fetchMessages = async () => {
-  //     // Fetch messages from the API
-  //       var requestOptions = {
-  //         method: 'GET',
-  //         redirect: 'follow'
-  //       };
-  //     fetch(`http://13.58.199.27:8000/model_switcher_test/?prompt=Can you summarize this Medium blog for me?&medium_link=https://medium.com/sfu-cspmp/the-artistic-potential-of-ai-understanding-dall-e-2-and-stable-diffusion-10a82e6965c0`, requestOptions)
-  //         .then(response => response.text())
-  //         .then(results => {
-  //           console.log(results);
-  //           let jsonObject = JSON.parse(results)
-  //           console.log(jsonObject);
-  //           setMessages(prevMessages => [
-  //             ...prevMessages,
-  //             { id: prevMessages.length + 1, text: jsonObject['summary'], sender: 'bot', avatar: botAvatar }
-  //           ]);
-  //           // fakeMessages.push({id: fakeMessages.length + 1, text: jsonObject['summary'], sender: 'bot', avatar: botAvatar})
-            
-  //         })
-  //         .catch(error => console.log('Failed to fetch messages', error))
-  //         .finally(() => {
-  //           setIsLoading(false)
-  //         })
-  //   };
-
-  //   fetchMessages();
-  // }, []);
-
-  const handleSubmit = (event, e) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     console.log(image);
-    if (newMessage.trim()) {
-      const newMessageObj = {
-        id: messages.length + 1,
-        text: newMessage,
-        sender: 'user',
-        avatar: userAvatar,
-      };
-    }
-      var fileBuffer = null;
-      // if (image) {
-      //   setMessages(prevMessages => [
-      //     ...prevMessages,
-      //     { id: prevMessages.length + 1, image: URL.createObjectURL(image), sender: 'user', avatar: userAvatar }
-      //   ]);
-      //   file = image;
-      //   setImage(null);
-      //   setUploadedFileName('');
-      // }
-      let file = {...image};
       if (image) {
-     
-        // const reader = new FileReader();
-        // reader.onload = (event) => {
-        //   console.log(event)
-        //   const arrayBuffer = event.target.result;
-        //   blob = new Blob([arrayBuffer], { type: 'application/pdf' });
-        //   setMessages(prevMessages => [
-        //     ...prevMessages,
-        //     { id: prevMessages.length + 1, file: blob, sender: 'user', avatar: userAvatar }
-        //   ]);
-        // };
-        // file = blob;
-        // reader.readAsArrayBuffer(image);
-        //  setImage(null);
-        // setUploadedFileName('');
-      
       setMessages(prevMessages => [
         ...prevMessages,
         { id: prevMessages.length + 1, text: image.name, sender: 'user', avatar: userAvatar }
@@ -109,10 +33,9 @@ const ChatApp = () => {
           { id: prevMessages.length + 1, text: newMessage, sender: 'user', avatar: userAvatar }
         ]);
       }
-      // setMessages([...messages, newMessageObj]);
       let shouldUpdateState = false;
       let jsonObject = {};
-      if(userResponse == 'prompt'){
+      if(userResponse === 'prompt'){
         setIsLoading(true);
         var requestOptions = {
           method: 'GET',
@@ -172,26 +95,16 @@ const ChatApp = () => {
             url = 'http://3.14.131.137:8000/model_get_blog_summary/'
             break;
           case "resume":
-            console.log('blob', pdfBlob, image);
-
             formdata.append("resume",  image, "sample_resume.pdf");
             console.log('form',formdata);
             url = "http://3.14.131.137:8000/model_get_resume_summary/";
             break;
-            case "resume":
-
-            formdata.append("resume",  image, "sample_resume.pdf");
-            console.log('form',formdata);
-            url = "http://3.14.131.137:8000/model_get_resume_summary/";
-            break;
-            case "suduko":
-
+          case "suduko":
             formdata.append("suduko",  image, "sample_sudoku.jpeg");
             console.log('form',formdata);
             url = "http://3.14.131.137:8000/model_get_suduko/";
             break;
-            case "audio_to_text":
-
+          case "audio_to_text":
             formdata.append("audio",  image, "audio.wav");
             console.log('form',formdata);
             url = "http://3.14.131.137:8000/model_get_audio_to_text/";
@@ -233,13 +146,6 @@ const ChatApp = () => {
        
       }
       setNewMessage('');
-      // setTimeout(() => {
-      //   setMessages(prevMessages => [
-      //     ...prevMessages,
-      //     { id: prevMessages.length + 1, text: "Sorry, I don't understand. Could you please rephrase that?", sender: 'bot', avatar: botAvatar }
-      //   ]);
-      // }, 1000);
-    // }
   };
 
     
@@ -248,21 +154,6 @@ const ChatApp = () => {
     console.log(event.target.files)
     setImage(event.target.files[0]);
     setUploadedFileName(event.target.files[0].name);
-  //   if(category === "resume"){
-  //     const file = event.target.files[0];
-  //   const reader = new FileReader();
-
-  //   reader.onload = () => {
-  //     const pdfDataUrl = reader.result;
-  //     const pdfBlob = new Blob([pdfDataUrl], { type: 'application/pdf' });
-  //     setPdfBlob(pdfBlob);
-  //   }
-  //   reader.readAsArrayBuffer(file);
-  //   }
-  //  else if(category === "suduko"){
-
-  //   }
-    
   };
 
   return (
