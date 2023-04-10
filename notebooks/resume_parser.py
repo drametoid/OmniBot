@@ -6,7 +6,7 @@ fname = '../files/alice_clark.pdf'
 doc = fitz.open(fname)
 text = ""
 for page in doc:
-    text = text + str(page.getText())
+    text = text + str(page.get_text())
 tx = " ".join(text.split('\n'))
 doc = nlp_model(tx)
 for ent in doc.ents:
