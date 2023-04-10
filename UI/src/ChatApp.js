@@ -7,54 +7,56 @@ import { faPaperPlane, faUpload } from '@fortawesome/free-solid-svg-icons';
 
 
 const ChatApp = () => {
-  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [image, setImage] = useState(null);
   const [uploadedFileName, setUploadedFileName] = useState('');
   const [prompt, setPrompt] = useState('');
   const [link, setLink] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [userResponse, setuserResponse] = useState('prompt');
+  const [userInput, setUserInput] = useState('');
+  const [category, setCategory] = useState('');
 
- 
+  const fakeMessages = [
+    { id: 1, text: 'Hi there! What can I do for you', sender: 'bot', avatar: botAvatar },
+    // { id: 2, text: 'Hi there!', sender: 'bot', avatar: botAvatar },
+    // { id: 3, text: 'What can I do for you?', sender: 'bot', avatar: botAvatar },
+    // { id: 4, text: "Can you summarize this Medium blog for me?", sender: 'user', avatar: userAvatar },
+    // { id: 5, text: 'Sure, Please enter the URL for the blog.', sender: 'bot', avatar: botAvatar },
+    // { id: 6, text: "MEDIUM_LINK: https://medium.com/sfu-cspmp/the-artistic-potential-of-ai-understanding-dall-e-2-and-stable-diffusion-10a82e6965c0", sender: 'user', avatar: userAvatar },
+    // { id: 7, text: '<div class="title">The Artistic Potential of AI: Understanding DALL-E 2 and Stable Diffusion</div><div class="sub-title">Written by Machine Minds on Feb 11</div><div class="heading">An Overview</div><div>AI is transforming the digital world by allowing machines to act and think like humans. Generative AI takes this a step further, introducing the ability to craete visuals, texts, sounds or songs. Models such as DALL-E 2 and Stable Diffusion, developed by OpenAI and LMU Munich respectively, use transformer-based designs and extensive training data to generate images from verbal descriptions, pushing the boundaries of creativity. AI has something to offer for everyone, with endless possibilities in store.<div>  \n <div class="heading">The Technology Behind DALL-E 2 </div>', sender: 'bot', avatar: botAvatar },
+  ];
+  const [messages, setMessages] = useState(fakeMessages);
   // This useEffect hook will simulate fetching messages from a backend.
-  useEffect(() => {
-    const fakeMessages = [
-      { id: 1, text: 'Hello!', sender: 'user', avatar: userAvatar },
-      { id: 2, text: 'Hi there!', sender: 'bot', avatar: botAvatar },
-      { id: 3, text: 'What can I do for you?', sender: 'bot', avatar: botAvatar },
-      { id: 4, text: "Can you summarize this Medium blog for me?", sender: 'user', avatar: userAvatar },
-      { id: 5, text: 'Sure, Please enter the URL for the blog.', sender: 'bot', avatar: botAvatar },
-      { id: 6, text: "MEDIUM_LINK: https://medium.com/sfu-cspmp/the-artistic-potential-of-ai-understanding-dall-e-2-and-stable-diffusion-10a82e6965c0", sender: 'user', avatar: userAvatar },
-      // { id: 7, text: '<div class="title">The Artistic Potential of AI: Understanding DALL-E 2 and Stable Diffusion</div><div class="sub-title">Written by Machine Minds on Feb 11</div><div class="heading">An Overview</div><div>AI is transforming the digital world by allowing machines to act and think like humans. Generative AI takes this a step further, introducing the ability to craete visuals, texts, sounds or songs. Models such as DALL-E 2 and Stable Diffusion, developed by OpenAI and LMU Munich respectively, use transformer-based designs and extensive training data to generate images from verbal descriptions, pushing the boundaries of creativity. AI has something to offer for everyone, with endless possibilities in store.<div>  \n <div class="heading">The Technology Behind DALL-E 2 </div>', sender: 'bot', avatar: botAvatar },
-    ];
-    setMessages(fakeMessages);
-    const fetchMessages = async () => {
-      // Fetch messages from the API
-        var requestOptions = {
-          method: 'GET',
-          redirect: 'follow'
-        };
-      fetch(`http://13.58.199.27:8000/model_switcher_test/?prompt=Can you summarize this Medium blog for me?&medium_link=https://medium.com/sfu-cspmp/the-artistic-potential-of-ai-understanding-dall-e-2-and-stable-diffusion-10a82e6965c0`, requestOptions)
-          .then(response => response.text())
-          .then(results => {
-            console.log(results);
-            let jsonObject = JSON.parse(results)
-            console.log(jsonObject);
-            setMessages(prevMessages => [
-              ...prevMessages,
-              { id: prevMessages.length + 1, text: jsonObject['summary'], sender: 'bot', avatar: botAvatar }
-            ]);
-            // fakeMessages.push({id: fakeMessages.length + 1, text: jsonObject['summary'], sender: 'bot', avatar: botAvatar})
+  // useEffect(() => {
+    
+  //   const fetchMessages = async () => {
+  //     // Fetch messages from the API
+  //       var requestOptions = {
+  //         method: 'GET',
+  //         redirect: 'follow'
+  //       };
+  //     fetch(`http://13.58.199.27:8000/model_switcher_test/?prompt=Can you summarize this Medium blog for me?&medium_link=https://medium.com/sfu-cspmp/the-artistic-potential-of-ai-understanding-dall-e-2-and-stable-diffusion-10a82e6965c0`, requestOptions)
+  //         .then(response => response.text())
+  //         .then(results => {
+  //           console.log(results);
+  //           let jsonObject = JSON.parse(results)
+  //           console.log(jsonObject);
+  //           setMessages(prevMessages => [
+  //             ...prevMessages,
+  //             { id: prevMessages.length + 1, text: jsonObject['summary'], sender: 'bot', avatar: botAvatar }
+  //           ]);
+  //           // fakeMessages.push({id: fakeMessages.length + 1, text: jsonObject['summary'], sender: 'bot', avatar: botAvatar})
             
-          })
-          .catch(error => console.log('Failed to fetch messages', error))
-          .finally(() => {
-            setIsLoading(false)
-          })
-    };
+  //         })
+  //         .catch(error => console.log('Failed to fetch messages', error))
+  //         .finally(() => {
+  //           setIsLoading(false)
+  //         })
+  //   };
 
-    fetchMessages();
-  }, []);
+  //   fetchMessages();
+  // }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -76,23 +78,96 @@ const ChatApp = () => {
         sender: 'user',
         avatar: userAvatar,
       };
-      setMessages([...messages, newMessageObj]);
-      if(newMessage.includes('summarize this Medium blog')){
-        setPrompt('Can you summarize this Medium blog for me?')
+      setMessages(prevMessages => [
+                    ...prevMessages,
+                    { id: prevMessages.length + 1, text: newMessageObj.text, sender: 'user', avatar: userAvatar }
+                  ]);
+      // setMessages([...messages, newMessageObj]);
+      let shouldUpdateState = false;
+      let jsonObject = {};
+      if(userResponse == 'prompt'){
+        setIsLoading(true);
+        var requestOptions = {
+          method: 'GET',
+          redirect: 'follow'
+        };
+        fetch(`http://18.223.196.231:8000/model_get_category/?prompt=${newMessageObj.text}`, requestOptions)
+          .then(response => response.text())
+          .then(result => {
+            console.log(result);
+            jsonObject = JSON.parse(result);
+            shouldUpdateState = true;
+          })
+          .catch(error => console.log('error', error))
+          .finally(() => {
+            if(shouldUpdateState){
+              // setUserInput(category);
+              setCategory(jsonObject['category']);
+              switch(jsonObject['category']) {
+                case 'blog':
+                  setIsLoading(false);
+                  setMessages(prevMessages => [
+                    ...prevMessages,
+                    { id: prevMessages.length + 1, text: 'Sure! Can you provide the link for the blog?', sender: 'bot', avatar: botAvatar }
+                  ]);
+                  setuserResponse('input');
+                  break;
+              }
+            }
+          });
       }
-      if(newMessage.upper().includes('MEDIUM_LINK')){
-        setLink('https://medium.com/sfu-cspmp/the-artistic-potential-of-ai-understanding-dall-e-2-and-stable-diffusion-10a82e6965c0')
+      if(userResponse === 'input'){
+        setIsLoading(true);
+        let url = '';
+        let res = '';
+        let formdata = new FormData();
+        switch(category) {
+          case "blog":
+            console.log(newMessage);
+            formdata.append("medium_link", newMessage);
+            console.log(formdata)
+            url = 'http://18.223.196.231:8000/model_get_blog_summary/'
+            break;
+        }
+        let requestOptions = {
+          method: 'POST',
+          body: formdata,
+          redirect: 'follow'
+        };
+        fetch(`${url}`, requestOptions)
+          .then(response => response.text())
+          .then(result => {
+            console.log(result);
+            let jsonObject = JSON.parse(result);
+            res = jsonObject['summary']
+            shouldUpdateState = true;
+          })
+          .catch(error => console.log('error', error))
+          .finally(() => {
+            if(shouldUpdateState){
+              // setUserInput(category);
+              switch(category) {
+                case 'blog':
+                  setIsLoading(false);
+                  setMessages(prevMessages => [
+                    ...prevMessages,
+                    { id: prevMessages.length + 1, text: res, sender: 'bot', avatar: botAvatar },
+                    { id: prevMessages.length + 2, text: "What else I can do for you?", sender: 'bot', avatar: botAvatar }
+                  ]);
+                  setuserResponse('prompt');
+                  break;
+              }
+            }
+          });
+       
       }
       setNewMessage('');
-      setTimeout(() => {
-        const botResponse = {
-          id: messages.length + 2,
-          text: `Sorry, I don't understand. Could you please rephrase that?`,
-          sender: 'bot',
-          avatar: botAvatar,
-        };
-        setMessages([...messages, botResponse]);
-      }, 1000);
+      // setTimeout(() => {
+      //   setMessages(prevMessages => [
+      //     ...prevMessages,
+      //     { id: prevMessages.length + 1, text: "Sorry, I don't understand. Could you please rephrase that?", sender: 'bot', avatar: botAvatar }
+      //   ]);
+      // }, 1000);
     }
   };
 
