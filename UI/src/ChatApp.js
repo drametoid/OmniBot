@@ -124,7 +124,10 @@ const ChatApp = () => {
               res = jsonObject['transcript']
             }
             else{
-              res = jsonObject['summary']
+              if(category === 'suduko'){
+                res = `Here is the solution for the suduku puzzle you asked for: \n\n`
+              }
+              res += jsonObject['summary']
             }
             shouldUpdateState = true;
           })
