@@ -193,7 +193,9 @@ def scale_and_centre(img, size, margin=20, background=0):
 def extract(img_path):
     # print("Enter image name: ")
     # image_url = input()
-    img = cv2.imread(img_path)
+    # img = cv2.imread(img_path)
+    image_data = np.fromstring(img_path.read(), np.uint8)
+    img = cv2.imdecode(image_data, cv2.IMREAD_COLOR)
     processed_sudoku = processing(img)
     sudoku = find_corners(processed_sudoku)
     transformed = perspective_transform(img, sudoku)

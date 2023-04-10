@@ -10,6 +10,7 @@ import io
 import speech_recognition as sr
 from model_switcher.scraping_functions import display_summary
 from model_switcher.lstm_utlis import LSTM_Predictor
+from model_switcher.suduko_helper import solve_suduko
 
 def preprocess_prompt(prompt):
     prompt = prompt.lower()
@@ -44,7 +45,7 @@ def get_prompt_category(prompt):
     return predicted_category
 
 def get_suduko_solver(suduko):
-    pass
+    return solve_suduko('img', suduko, saved_model_path="/Users/raghukapur/private-projects/final_project_733/OmniBot/SudokuSolver/model/sudoku.h5")
 
 def summarize_article(article_link):
     article_summary, length = display_summary(article_link)

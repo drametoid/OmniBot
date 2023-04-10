@@ -104,11 +104,15 @@ class ModelSwitcherSudukoView(APIView):
         if not 'suduko' in request.FILES:
             return Response({"message": f"file with name 'suduko' is missing from the request"}, status=status.HTTP_400_BAD_REQUEST)
         # summarized_resume = get_resume_summarized(request.FILES[file_name])
-        suduko_result = "this is dummy data"
-        if not suduko_result:
+        suduko_result = get_suduko_solver(request.FILES['suduko'])
+        res = ""
+        for i in suduko_result:
+            res += str(i) + "\n"
+
+        if not res:
             return Response(data={"message": "Failed to get article summary, please try after some time"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
-            return Response(data={"summary": suduko_result}, status=status.HTTP_200_OK)
+            return Response(data={"summary": res}, status=status.HTTP_200_OK)
 
 class ModelSwitcherAudioView(APIView):
 
