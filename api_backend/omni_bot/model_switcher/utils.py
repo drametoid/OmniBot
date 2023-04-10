@@ -6,7 +6,10 @@ import string
 import pickle
 import spacy
 import sys, fitz
+import io
+import speech_recognition as sr
 from model_switcher.scraping_functions import display_summary
+from model_switcher.lstm_utlis import LSTM_Predictor
 
 def preprocess_prompt(prompt):
     prompt = prompt.lower()
@@ -45,20 +48,45 @@ def get_suduko_solver(suduko):
 
 def summarize_article(article_link):
     article_summary, length = display_summary(article_link)
-    print(article_summary)
-    print("//////////////")
     return article_summary
 
 def get_resume_summarized(resume):
     nlp_model = spacy.load('/Users/raghukapur/private-projects/final_project_733/OmniBot/models/nlp_model')
-    print("----------------")
-    doc = fitz.open(resume)
-    print(doc)
+    doc = fitz.open(stream=resume.read(), filetype='pdf')
     text = ""
     for page in doc:
-        text = text + str(page.getText())
+        text = text + str(page.get_text())
     tx = " ".join(text.split('\n'))
 
     doc = nlp_model(tx)
+    resume_summary = ""
     for ent in doc.ents:
-        print(f'{ent.label_.upper():{30}}- {ent.text}')
+        resume_summary += f'{ent.label_.upper():{30}}- {ent.text}' + "\n"
+    return resume_summary
+
+def get_lstm_prompt_prediction(prompt):
+    MODEL_PATH = "/Users/raghukapur/private-projects/final_project_733/OmniBot/switcher/LSTM/LSTM.pt"
+    predictor = LSTM_Predictor(MODEL_PATH)
+    predictor.load_model()
+    prediction = predictor.get_prediction(prompt)
+    if prediction:
+        final_pred = prediction[0]
+        if final_pred[0] == "resume_summary_data":
+            return "resume"
+        elif final_pred[0] == "blog_scrapping":
+            return "blog"
+        elif final_pred[0] == "audio_to_text_data":
+            return "audio_to_text"
+        elif final_pred[0] == "suduko_data":
+            return "suduko"
+        elif final_pred[0] == "random_data":
+            return "random"
+    return None
+
+def convert_audio_to_text(file):
+    r = sr.Recognizer()
+    file_content = file.read()
+    with sr.AudioFile(io.BytesIO(file_content)) as source:
+        audio_data = r.record(source)
+        text = r.recognize_google(audio_data)
+    return text

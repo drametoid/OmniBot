@@ -1,3 +1,4 @@
+from nis import cat
 from django.shortcuts import render
 from rest_framework.views import APIView
 import openai
@@ -5,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 import json
 import os
-from model_switcher.utils import preprocess_prompt, get_prompt_category, summarize_article, get_suduko_solver, get_resume_summarized
+from model_switcher.utils import preprocess_prompt, get_prompt_category, summarize_article, get_suduko_solver, get_resume_summarized, get_lstm_prompt_prediction, convert_audio_to_text
 from dotenv import load_dotenv
 
 ## Loading Env Variables
@@ -59,6 +60,68 @@ class ModelSwitcherView(APIView):
             res.append("Not Sure")
         return Response(data={"message": f"User is asking to use {text}"}, status=status.HTTP_200_OK)
 
+class ModelSwitcherGetCategoryView(APIView):
+
+    def get(self, request): 
+        prompt = request.GET.get('prompt', '')
+        if not prompt:
+            return Response(data={"message": "Prompt is a required field"}, status=status.HTTP_400_BAD_REQUEST)
+        print(prompt)
+        processed_prompt = preprocess_prompt(prompt)
+        category = get_prompt_category(processed_prompt)
+        lstm_category = get_lstm_prompt_prediction(prompt)
+        print(category, lstm_category)
+        if lstm_category != category:
+            return Response(data={"message": "Need more info"}, status=status.HTTP_204_NO_CONTENT)
+        return Response(data={"category": category}, status=status.HTTP_200_OK)    
+
+class ModelSwitcherBlogSummaryView(APIView):
+
+    def post(self, request):
+        link = request.POST.get('medium_link', '')
+        if not link:
+            return Response(data={"message": "medium_link is a required field"}, status=status.HTTP_400_BAD_REQUEST)
+        summarized_article = summarize_article(link)
+        if not summarized_article:
+            return Response(data={"message": "Failed to get article summary, please try after some time"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(data={"summary": summarized_article}, status=status.HTTP_200_OK)
+
+class ModelSwitcherResumeSummaryView(APIView):
+
+    def post(self, request):
+        if not 'resume' in request.FILES:
+            return Response({"message": f"file with name 'resume' is missing from the request"}, status=status.HTTP_400_BAD_REQUEST)
+        summarized_resume = get_resume_summarized(request.FILES['resume'])
+        if not summarized_resume:
+            return Response(data={"message": "Failed to get article summary, please try after some time"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(data={"summary": summarized_resume}, status=status.HTTP_200_OK)
+
+class ModelSwitcherSudukoView(APIView):
+
+    def post(self, request):
+        if not 'suduko' in request.FILES:
+            return Response({"message": f"file with name 'suduko' is missing from the request"}, status=status.HTTP_400_BAD_REQUEST)
+        # summarized_resume = get_resume_summarized(request.FILES[file_name])
+        suduko_result = "this is dummy data"
+        if not suduko_result:
+            return Response(data={"message": "Failed to get article summary, please try after some time"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(data={"summary": suduko_result}, status=status.HTTP_200_OK)
+
+class ModelSwitcherAudioView(APIView):
+
+    def post(self, request):
+        if not 'audio' in request.FILES:
+            return Response({"message": f"file with name 'audio' is missing from the request"}, status=status.HTTP_400_BAD_REQUEST)
+        audio_to_text = convert_audio_to_text(request.FILES['audio'])
+        # suduko_result = "this is dummy data"
+        if not audio_to_text:
+            return Response(data={"message": "Failed to get audio_to_text, please try after some time"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(data={"transcript": audio_to_text}, status=status.HTTP_200_OK)
+
 class ModelSwitcherTestView(APIView):
 
     def post(self, request): 
@@ -68,6 +131,9 @@ class ModelSwitcherTestView(APIView):
         print(prompt)
         processed_prompt = preprocess_prompt(prompt)
         category = get_prompt_category(processed_prompt)
+        lstm_category = get_lstm_prompt_prediction(prompt)
+        if lstm_category != category:
+            return Response(data={"message": "Need more info"}, status=status.HTTP_)
         if category == "blog":
             link = request.POST.get('medium_link', '')
             if not link:
