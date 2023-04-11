@@ -30,18 +30,6 @@ Short project demo on YouTube - https://youtu.be/3ru1CU8xq4M
     - Resume Parser
 - For Article Summary use-case we have used scraping techniques and passed each subsection to GPT3.5 API that returned a summary of that section. Using these summarized sections, we created a summarized article.
 
-## OmniBot Output
-- Resume Summary
-![Resume Summary](/Images/ResumeSummary.png?raw=true "Resume Summary")
-- Suduko Solver
-![Sudoku Solver](/Images/SudokuSolver.png?raw=true "Sudoku Solver")
-- Article Summary
-![Article Summary](/Images/ArticleSummary.png?raw=true "Article Summary")
-- Audio To Text
-![Audio To Text](/Images/AudioToText.png?raw=true "Audio To Text")
-
-All the files used for testing in present in the "files" folder
-
 ## WebApp setup
 - Move to UI folder
 - run 
@@ -63,3 +51,21 @@ npm start
     ```
 - The path to model files can be checked in the folder
 - Currently the backend server is deployed on an EC2 instance
+
+## OmniBot Output
+- Resume Summary
+
+![Resume Summary](/Images/ResumeSummary.png?raw=true "Resume Summary")
+
+- Suduko Solver
+
+![Sudoku Solver](/Images/SudokuSolver.png?raw=true "Sudoku Solver")
+- Article Summary
+
+![Article Summary](/Images/ArticleSummary.png?raw=true "Article Summary")
+
+- Audio To Text
+
+![Audio To Text](/Images/AudioToText.png?raw=true "Audio To Text")
+
+All the files used for testing in present in the "files" folder
