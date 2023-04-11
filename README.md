@@ -4,6 +4,9 @@ A Natural Language AI chatbot that accepts an input problem, categorizes it and 
 ## Project Demo
 Short project demo on YouTube - https://youtu.be/3ru1CU8xq4M
 
+## Project Documentation
+Project Documentation is available [here](https://docs.google.com/document/d/1lO4cFfUmj0LciJELf5P9Y5nMdugfiKDmT5L8v7vtl5Y/edit)
+
 ## Project Motivation
 - The motivation for our project is to enhance the usability of NLP-based AI chatbots by enabling a plug-and-play mechanism to add user-defined models for custom problems. 
 - Currently, most chatbots are designed to handle specific use cases and have limited functionality.
