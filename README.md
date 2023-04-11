@@ -11,7 +11,7 @@ Short project demo on YouTube - https://youtu.be/3ru1CU8xq4M
 - Our goal is to create a chatbot with a flexible and extensible architecture that can handle a wide range of use cases and be easily customized to add new models.
 
 ## Architecture Diagram
-![Architecture Diagram](/images/FinalProjectDiagram.png?raw=true "Architecture Diagram")
+![Architecture Diagram](/Images/FinalProjectDiagram.png?raw=true "Architecture Diagram")
 
 ## Data Science Pipeline
 - Switcher Model
@@ -32,13 +32,13 @@ Short project demo on YouTube - https://youtu.be/3ru1CU8xq4M
 
 ## OmniBot Output
 - Resume Summary
-![Resume Summary](/images/ResumeSummary.png?raw=true "Resume Summary")
+![Resume Summary](/Images/ResumeSummary.png?raw=true "Resume Summary")
 - Suduko Solver
-![Sudoku Solver](/images/SudokuSolver.png?raw=true "Sudoku Solver")
+![Sudoku Solver](/Images/SudokuSolver.png?raw=true "Sudoku Solver")
 - Article Summary
-![Article Summary](/images/ArticleSummary.png?raw=true "Article Summary")
+![Article Summary](/Images/ArticleSummary.png?raw=true "Article Summary")
 - Audio To Text
-![Audio To Text](/images/AudioToText.png?raw=true "Audio To Text")
+![Audio To Text](/Images/AudioToText.png?raw=true "Audio To Text")
 
 All the files used for testing in present in the "files" folder
 
@@ -62,3 +62,4 @@ npm start
         python3 manage.py runserver
     ```
 - The path to model files can be checked in the folder
+- Currently the backend server is deployed on an EC2 instance
