@@ -2,7 +2,7 @@
 A Natural Language AI chatbot that accepts an input problem, categorizes it and solves it by invoking the relevant custom ML model. 
 
 ## Project Demo
-Short project demo on YouTube - https://youtu.be/3ru1CU8xq4M
+Short project demo on YouTube - https://www.youtube.com/watch?v=KSu2YexyuYQ
 
 ## Project Documentation and Poster
 - Project Documentation is available [here](https://docs.google.com/document/d/1lO4cFfUmj0LciJELf5P9Y5nMdugfiKDmT5L8v7vtl5Y/edit)
@@ -43,18 +43,8 @@ npm start
 ```
 
 ## Backend setup
-- Backend Code is developed using Django a Python API Framework 
-- Move to api_backend
-- Start the virtual enviornment
-    ```
-        source django/bin/activate 
-    ```
-- Move to backend folder -> omni_bot and start the api server
-    ```
-        python3 manage.py runserver
-    ```
-- The path to model files can be checked in the folder
-- Currently the backend server is deployed on an EC2 instance
+- Currently the backend server is deployed on an EC2 instance at this IP - 3.14.131.137
+- To prevent high costs, we are not keeping the instance active at all time. In case you need to run the demo, please send us an email and we will spin up the backend instance for you
 
 ## OmniBot Output
 - Resume Summary
