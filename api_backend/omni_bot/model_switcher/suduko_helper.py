@@ -3,6 +3,8 @@ import numpy as np
 import sys
 import keras
 from detector import detect_sudoku
+import os
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
 def norm(a):
     return (a/9)-.5
@@ -59,8 +61,8 @@ def solve_suduko(input_type, input_file, saved_model_path=None):
     else:
         model = keras.models.load_model(saved_model_path)
         if input_type == 'img':
-            sudoku_arr = detect_sudoku.get_extracted_digits("/Users/raghukapur/private-projects/final_project_733/OmniBot/SudokuSolver/detector/model/cnn.hdf5", input_file)
-            print(sudoku_arr)
+            path = os.path.join(script_dir,'detector', 'model', 'cnn.hdf5')
+            sudoku_arr = detect_sudoku.get_extracted_digits(path,input_file)
             sudoku_output = solve_sudoku_img(model, sudoku_arr)
             return sudoku_output
         elif input_type == 'txt':

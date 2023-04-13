@@ -11,6 +11,8 @@ import speech_recognition as sr
 from model_switcher.scraping_functions import display_summary
 from model_switcher.lstm_utlis import LSTM_Predictor
 from model_switcher.suduko_helper import solve_suduko
+import os
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
 def preprocess_prompt(prompt):
     prompt = prompt.lower()
@@ -39,20 +41,23 @@ def preprocess_prompt(prompt):
     return ' '.join(features)
 
 def get_prompt_category(prompt):
-    with open('/Users/raghukapur/private-projects/final_project_733/OmniBot/api_backend/omni_bot/model_switcher/model_weights/prompt_classification.pkl', 'rb') as f:
+    file_path = os.path.join(script_dir, 'model_weights', 'prompt_classification.pkl')
+    with open(file_path, 'rb') as f:
         model = pickle.load(f)
     predicted_category = model.predict([prompt])[0]
     return predicted_category
 
 def get_suduko_solver(suduko):
-    return solve_suduko('img', suduko, saved_model_path="/Users/raghukapur/private-projects/final_project_733/OmniBot/SudokuSolver/model/sudoku.h5")
+    saved_model_path = os.path.join(script_dir,'..' ,'..', '..', 'SudokuSolver', 'SudokuSolver' , 'model', 'sudoku.h5')
+    return solve_suduko('img', suduko, saved_model_path=saved_model_path)
 
 def summarize_article(article_link):
     article_summary, length = display_summary(article_link)
     return article_summary
 
 def get_resume_summarized(resume):
-    nlp_model = spacy.load('/Users/raghukapur/private-projects/final_project_733/OmniBot/models/nlp_model')
+    nlp_model_path = os.path.join(script_dir,'..',  '..', '..', 'models', 'nlp_model')
+    nlp_model = spacy.load(nlp_model_path)
     doc = fitz.open(stream=resume.read(), filetype='pdf')
     text = ""
     for page in doc:
@@ -66,7 +71,7 @@ def get_resume_summarized(resume):
     return resume_summary
 
 def get_lstm_prompt_prediction(prompt):
-    MODEL_PATH = "/Users/raghukapur/private-projects/final_project_733/OmniBot/switcher/LSTM/LSTM.pt"
+    MODEL_PATH = os.path.join(script_dir, '..', '..', 'switcher','LSTM', 'LSTM.pt')
     predictor = LSTM_Predictor(MODEL_PATH)
     predictor.load_model()
     prediction = predictor.get_prediction(prompt)
